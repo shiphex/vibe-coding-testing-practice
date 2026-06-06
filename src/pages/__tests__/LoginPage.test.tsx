@@ -173,7 +173,7 @@ describe('LoginPage', () => {
                 password: 'abcdefgh',
             });
 
-            expect(screen.getByText('密碼必須包含英xxxxxxxxx文字母和數字')).toBeInTheDocument();
+            expect(screen.getByText('密碼必須包含英文字母和數字')).toBeInTheDocument();
             expect(authState.login).not.toHaveBeenCalled();
             expect(mocks.navigate).not.toHaveBeenCalled();
         });
