@@ -1,0 +1,48 @@
+name: Test And Coverage
+
+on:
+  push:
+    branches:
+      - "**"
+    tags-ignore:
+      - "**"
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-${{ github.ref_name }}-${{ github.run_number }}
+          path: coverage
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload Vitest HTML report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vitest-html-report-${{ github.ref_name }}-${{ github.run_number }}
+          path: html-report
+          if-no-files-found: error
+          retention-days: 14
